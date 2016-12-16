@@ -1,0 +1,85 @@
+body {
+    background: #eeeee7;
+    max-width: 500px;
+    margin: 15% auto;
+    font-family: 'Lucida Grande', Arial, sans-serif;
+    font-size: 0.7em;
+}
+ol {
+    padding-left: 20px;
+}
+ol.unset {
+    padding-left: 0;
+}
+ol.unset li {
+    display: none;
+}
+ol.unset li:first-child {
+    display: inherit;
+}
+.hidden {
+    display: none;
+}
+#link a {
+    text-decoration: none;
+}
+#link {
+    border: dashed 1px #bba;
+    margin-left: -10px;
+    padding: 10px;
+    background: #fff;
+}
+#link span:hover {
+    color: royalblue;
+}
+#link span {
+    float: right;
+    margin: -7px -5px 0 0;
+    cursor: pointer;
+}
+#pwd {
+    width: 150px;
+    border: solid 2px #ddc;
+    padding: 5px;
+    border-radius: 3px;
+}
+#ref {
+    margin-top: 30px;
+}
+#github {
+    background: url(https://assets-cdn.github.com/pinned-octocat.svg) no-repeat left center/15px;
+    padding: 4px 0 5px 18px;
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+#github:hover {
+    color: #7059bc;
+}
+#heroku {
+    vertical-align: top;
+    opacity: 0.6;
+}
+#heroku:hover {
+    opacity: 1;
+}
+#heroku img {
+    height: 25px;
+    box-shadow: 0 0 10px -5px rgba(0,0,0,0.5);
+}
+input[type=submit] {
+    background: #0a0;
+    border: none;
+    color: #fff;
+    border-radius: 3px;
+    padding: 3px 8px 5px;
+    box-shadow: 0 0 7px -4px rgba(0,0,0,0.5);
+    text-shadow: 0 0 2px rgba(255,255,235,0.5);
+    cursor: pointer;
+}
+input[type=submit]:hover {
+    opacity: 0.9;
+}

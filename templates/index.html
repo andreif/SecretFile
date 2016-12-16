@@ -1,0 +1,112 @@
+<!-- See: http://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/ -->
+<!doctype html>
+<html>
+<head>
+    <title>&#x1f512;SecretFile</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>&#x1f512;SecretFile</h1>
+
+    <div id="link" class="hidden"><span>&times;</span>
+        <b>Your secret link is:</b> (will disappear in 1 min)<br> <a href=""></a></div>
+
+    <form method=post enctype=multipart/form-data>
+        <ol class="unset">
+            <li><input type="file" name="file" id="file"/></li>
+            <li>Password (optional):
+                <input type="password" name="pwd" style="width: 70px"></li>
+<!--
+            <li>Encrypt with phrase (optional):
+                <input type="password" name="encrypt" style="width: 70px"></li>
+-->
+            <li>Self-destruct if wrong password:
+                <input type="checkbox" name="destruct" checked></li>
+            <li>Max downloads (optional):
+                <input type="number" name="max" value="1" style="width: 30px"></li>
+            <li>Lifetime, minutes (optional):
+                <input type="number" name="lifetime" value="10" style="width: 30px"></li>
+            <li><input type="submit"></li>
+        </ol>
+        <hr>
+        <div id="note" style="max-width: 450px">
+        <b>Note:</b> Your file may be deleted in a few minutes because of server restart
+        due to inactivity, out-of-memory/disk space etc, so make sure the recipient gets it soon.
+        </div>
+
+        <div id="ref">
+            <p><b>Tips:</b> Why trust people you don't know &mdash; create your own file sharing server with ease:</p>
+            <a href="https://heroku.com/deploy?template=https://github.com/andreif/SecretFile" id="heroku"><img
+                    src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy"></a>
+
+            <a id="github" href="https://github.com/andreif/SecretFile" target="_blank">View source code</a>
+        </div>
+    </form>
+    <script>
+        function cookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+        function cookie_timeout(name, value, seconds) {
+            var now = new Date();
+            now.setTime(now.getTime() + 1000*seconds);
+            document.cookie = name + '=' + value + ';expires=' + now.toGMTString() + ';path=/';
+        }
+        function select(el) {
+            var range;
+            if (document.body.createTextRange) {
+                range = document.body.createTextRange();
+                range.moveToElementText(el);
+                range.select();
+            } else if (window.getSelection) {
+                var selection = window.getSelection();
+                range = document.createRange();
+                range.selectNodeContents(el);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }
+        var l = cookie('link');
+        /*var l = window.location.search.substring(1);
+        if (l.length > 0 && l.indexOf('link=') >= 0) {
+            l = l.replace('link=', '');
+            if (l.indexOf('&') >= 0) {
+                alert('Error!')
+            } else {*/
+        if (l) {
+            cookie_timeout('link', l, 60);
+            var div = document.querySelector('#link');
+            var x = div.querySelector('span');
+            var a = div.querySelector('a');
+            var h = window.location.href;
+            if (h.indexOf('?') > 0) {
+                h = h.substr(0, h.indexOf('?') - 1);
+            }
+            if (h.slice(-1) == '/') {
+                h = h.slice(0, -1);
+            }
+            l = h + decodeURIComponent(l);
+            a.href = l;
+            a.innerHTML = l;
+            div.classList.remove('hidden');
+
+            a.onmouseover = function() {
+                select(window.event.target);
+            };
+            select(a);
+            x.onclick = function() {
+                cookie_timeout('link', '', -60);
+                div.classList.add('hidden');
+            };
+            window.setTimeout(function() {
+                div.classList.add('hidden');
+            }, 1000 * 60);
+            //}
+        }
+        document.querySelector('#file').onchange = function() {
+            document.querySelector('ol').classList.remove('unset');
+        };
+    </script>
+</body>
+</html>
