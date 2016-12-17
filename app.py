@@ -57,7 +57,13 @@ class App(object):
             headers['Strict-Transport-Security'] = 'max-age=31536000'
 
         self._response('%d %s' % (code, RESPONSES[code]), list(headers.items()))
-        if isinstance(content, str):
+        if hasattr(content, 'read'):
+            block_size = 8196 * 4
+            if 'wsgi.file_wrapper' in self.env:
+                return self.env['wsgi.file_wrapper'](content, block_size)
+            else:
+                return iter(lambda: content.read(block_size), '')
+        elif isinstance(content, str):
             return [content.encode()]
         elif isinstance(content, bytes):
             return [content]
@@ -122,7 +128,8 @@ class App(object):
                                  content_type='html')
         if f.allowed(password=pwd):
             ct = CONTENT_TYPES.get(f.ext) or 'application/octet-stream'
-            return self.response(content=f.read(), content_type=ct)
+            with f.open() as fp:
+                return self.response(content=fp, content_type=ct)
         else:
             return self.response(404, content=f.error, content_type='html')
 
